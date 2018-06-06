@@ -18,6 +18,7 @@ export default class App extends React.Component {
       case '+': calc = num1 + num2; break;
       case '-': calc = num1 - num2; break;
       case '*': calc = num1 * num2; break;
+      case 'x': calc = num1 * num2; break;
       case '/': calc = num1 / num2; break;
       case ':': calc = num1 / num2; break;
       case '%': calc = num1 % num2; break;
@@ -29,14 +30,13 @@ export default class App extends React.Component {
 
   show(text) {
     if (!isNaN(Number(text))) {
-      this.setState({text: text, num1: Number(text), result: Number(text)});
+      this.setState({text: text, result: Number(text)});
     } else {
       const regexRemoveSpace = /\s/g;
-      const regexOnlyOperand = /[\+\-\*\/\:\%\^]/g;
+      const regexOnlyOperand = /[\+\-\*\/\:\%\^\x]/g;
       const textArr = text.replace(regexRemoveSpace, '').split('');
       const newArr = [];
       let join = '';
-      console.log(textArr)
 
       for (let index1 = 0; index1 < textArr.length; index1++) {
         if (textArr[index1].match(regexOnlyOperand)) {
@@ -54,8 +54,6 @@ export default class App extends React.Component {
         }
       }
 
-      console.log(newArr)
-
       let index2 = 0;
       while (index2 < newArr.length - 2) {
         let num1 = newArr[index2];
@@ -64,7 +62,7 @@ export default class App extends React.Component {
         let calc = this.calculate(num1, num2, operand);
         newArr[index2 + 2] = calc;
         index2 = index2 + 2;
-        this.setState({num1: num1, num2: num2, result: calc});
+        this.setState({text: text, result: calc});
       }
     }
   }
