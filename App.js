@@ -19,6 +19,7 @@ export default class App extends React.Component {
       case '-': calc = num1 - num2; break;
       case '*': calc = num1 * num2; break;
       case '/': calc = num1 / num2; break;
+      case ':': calc = num1 / num2; break;
       case '%': calc = num1 % num2; break;
       case '^': calc = Math.pow(num1, num2); break;
     }
@@ -27,31 +28,35 @@ export default class App extends React.Component {
   }
 
   show(text) {
-    if (text.length > 0) {
-      if (text[text.length - 1].match(/\s/)) {
-        this.setState({text: text, result: this.state.result});
-      } else {
-        const textArr = text.split(' ');
-        let index = 0;
+    if (!isNaN(Number(text))) {
+      this.setState({text: text, num1: Number(text), result: Number(text)});
+    } else {
+      const regexRemoveSpace = /\s/g;
+      const regexOnlyOperand = /[\+\-\*\/\:]/g;
+      const textArr = text.replace(regexRemoveSpace, '').split('');
+      const newArr = [];
+      let join = '';
 
-        while (index < textArr.length - 2) {
-          let num1 = textArr[index];
-          let operand = textArr[index + 1];
-          let num2 = textArr[index + 2];
-          let calc = this.calculate(Number(num1), Number(num2), operand);
-          textArr[index + 2] = String(calc);
-          index = index + 2;
-        }
-
-        let newResult;
-        if (!isNaN(Number(textArr[textArr.length - 1]))) {
-          newResult = Number(textArr[textArr.length - 1]);
-          this.setState({text: text, result: newResult});
+      for (let index1 = 0; index1 < textArr.length; index1++) {
+        if (textArr[index1].match(regexOnlyOperand)) {
+          newArr.push(join);
+          newArr.push(textArr[index1]);
+          join = '';
+        } else {
+          join += textArr[index1];
         }
       }
-    }else {
-      let emptyResult = 0;
-      this.setState({text: text, result: emptyResult});
+
+      let index2 = 0;
+      while (index2 < newArr.length - 2) {
+        let num1 = newArr[index2];
+        let operand = newArr[index2 + 1];
+        let num2 = newArr[index2 + 2];
+        let calc = this.calculate(Number(num1), Number(num2), operand);
+        newArr[index2 + 2] = String(calc);
+        index2 = index2 + 2;
+        this.setState({num1: Number(num1), num2: Number(num2), result: calc});
+      }
     }
   }
 
