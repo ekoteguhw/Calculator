@@ -36,6 +36,7 @@ export default class App extends React.Component {
       const textArr = text.replace(regexRemoveSpace, '').split('');
       const newArr = [];
       let join = '';
+      console.log(textArr)
 
       for (let index1 = 0; index1 < textArr.length; index1++) {
         if (textArr[index1].match(regexOnlyOperand)) {
@@ -53,13 +54,15 @@ export default class App extends React.Component {
         }
       }
 
+      console.log(newArr)
+
       let index2 = 0;
       while (index2 < newArr.length - 2) {
         let num1 = newArr[index2];
         let operand = newArr[index2 + 1];
         let num2 = newArr[index2 + 2];
         let calc = this.calculate(num1, num2, operand);
-        newArr[index2 + 2] = String(calc);
+        newArr[index2 + 2] = calc;
         index2 = index2 + 2;
         this.setState({num1: num1, num2: num2, result: calc});
       }
