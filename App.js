@@ -32,7 +32,7 @@ export default class App extends React.Component {
       this.setState({text: text, num1: Number(text), result: Number(text)});
     } else {
       const regexRemoveSpace = /\s/g;
-      const regexOnlyOperand = /[\+\-\*\/\:]/g;
+      const regexOnlyOperand = /[\+\-\*\/\:\%\^]/g;
       const textArr = text.replace(regexRemoveSpace, '').split('');
       const newArr = [];
       let join = '';
@@ -74,7 +74,7 @@ export default class App extends React.Component {
           style={styles.input}
           onChangeText={(text) => this.show(text)}
         />
-        <Text style={styles.result}>{this.state.result}</Text>
+        <Text style={styles.result}>Result: {this.state.result}</Text>
       </View>
     );
   }
