@@ -39,11 +39,17 @@ export default class App extends React.Component {
 
       for (let index1 = 0; index1 < textArr.length; index1++) {
         if (textArr[index1].match(regexOnlyOperand)) {
-          newArr.push(join);
           newArr.push(textArr[index1]);
           join = '';
         } else {
-          join += textArr[index1];
+          if (join != '') {
+            newArr.pop();
+            join += textArr[index1];
+            newArr.push(Number(join));
+          } else {
+            join += textArr[index1];
+            newArr.push(Number(textArr[index1]));
+          }
         }
       }
 
@@ -52,10 +58,10 @@ export default class App extends React.Component {
         let num1 = newArr[index2];
         let operand = newArr[index2 + 1];
         let num2 = newArr[index2 + 2];
-        let calc = this.calculate(Number(num1), Number(num2), operand);
+        let calc = this.calculate(num1, num2, operand);
         newArr[index2 + 2] = String(calc);
         index2 = index2 + 2;
-        this.setState({num1: Number(num1), num2: Number(num2), result: calc});
+        this.setState({num1: num1, num2: num2, result: calc});
       }
     }
   }
